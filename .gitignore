@@ -21,3 +21,5 @@ backup/
 .pytest_cache/
 imgui.ini
 __pycache__/
+.venv
+uv.lock

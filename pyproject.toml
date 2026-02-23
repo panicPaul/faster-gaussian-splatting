@@ -1,0 +1,19 @@
+[project]
+name = "faster-gaussian-splatting"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "numpy>=2.3.5",
+    "torch",
+    "FasterGSCudaBackend",
+]
+
+
+[[tool.uv.index]]
+name = "pytorch-cu130"
+url = "https://download.pytorch.org/whl/cu130"
+
+[tool.uv.sources]
+FasterGSCudaBackend = { path = "FasterGSCudaBackend" }
