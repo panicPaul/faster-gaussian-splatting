@@ -52,7 +52,7 @@ extension = CUDAExtension(
 setup(
     name=extension_name,
     author=__author__,
-    packages=[f'{extension_name}.torch_bindings'],
+    packages=[extension_name, f'{extension_name}.torch_bindings'],
     ext_modules=[extension],
     description=__description__,
     cmdclass={'build_ext': BuildExtension}
