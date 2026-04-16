@@ -14,18 +14,45 @@ ENABLE_NVCC_LINEINFO = False  # set to True for profiling kernels with Nsight Co
 module_root = Path(__file__).parent.absolute()
 extension_name = module_root.name
 extension_root = module_root / extension_name
-cuda_modules = [d.name for d in Path(extension_root).iterdir() if d.is_dir() and d.name not in ['utils', 'torch_bindings']]
+cuda_modules = [
+    d.name
+    for d in Path(extension_root).iterdir()
+    if d.is_dir()
+    and d.name not in ["utils", "torch_bindings", "__pycache__"]
+]
+
+
+def relpath(path: Path) -> str:
+    return path.relative_to(module_root).as_posix()
+
+
+def abspath(path: Path) -> str:
+    return path.resolve().as_posix()
+
 
 # gather source files
-sources = [str(extension_root / 'torch_bindings' / 'bindings.cpp')]
+sources = [relpath(extension_root / 'torch_bindings' / 'bindings.cpp')]
 for module in cuda_modules:
-    sources += glob(str(extension_root / module / 'src' / '**'/ '*.cpp'), recursive=True)
-    sources += glob(str(extension_root / module / 'src' / '**' / '*.cu'), recursive=True)
+    sources += [
+        relpath(Path(source))
+        for source in glob(
+            str(extension_root / module / 'src' / '**' / '*.cpp'),
+            recursive=True,
+        )
+    ]
+    sources += [
+        relpath(Path(source))
+        for source in glob(
+            str(extension_root / module / 'src' / '**' / '*.cu'),
+            recursive=True,
+        )
+    ]
 
 # gather include directories
-include_dirs = [str(extension_root / 'utils')]
+include_dirs = [abspath(extension_root / 'utils')]
 for module in cuda_modules:
-    include_dirs.append(str(extension_root / module / 'include'))
+    include_dirs.append(abspath(extension_root / module / 'include'))
+    include_dirs.append(abspath(extension_root / module / 'src'))
 
 # set up compiler flags
 cxx_flags = ['/std:c++17' if os.name == 'nt' else '-std=c++17']

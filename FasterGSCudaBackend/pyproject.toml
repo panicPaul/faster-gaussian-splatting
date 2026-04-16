@@ -1,6 +1,22 @@
 [build-system]
 requires = [
-    "setuptools",
+    "setuptools>=68",
+    "wheel",
     "torch",
 ]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "FasterGSCudaBackend"
+version = "0.0.0"
+description = "CUDA backend for the Faster Gaussian Splatting rasterizer."
+requires-python = ">=3.11"
+authors = [
+    { name = "Florian Hahlbohm" },
+]
+dependencies = [
+    "torch",
+]
+
+[tool.setuptools]
+packages = ["FasterGSCudaBackend", "FasterGSCudaBackend.torch_bindings"]
